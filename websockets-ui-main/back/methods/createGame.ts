@@ -1,6 +1,7 @@
 import Game from "../classes/Game";
 import crypto from 'crypto';
 import {rooms, users, games} from  "../database"
+import Game_User from "../classes/Game_User";
 export default function createGame(roomId: string) {
     const room = rooms.get(roomId);
     if (!room) {
@@ -21,7 +22,7 @@ export default function createGame(roomId: string) {
         }
         const playerKey = crypto.createHash('md5').update(String(GameUsers[i].id)).digest('hex');
         let userProperties = {...user};
-        game.players.set(playerKey, {...userProperties, gameId: game.idGame, ships: []});
+        game.players.set(playerKey, new Game_User(userProperties.index, userProperties.name, userProperties.ws_connection, userProperties.password, game.idGame));
     }
 
     game.players.forEach((value, key) => {
@@ -35,11 +36,9 @@ export default function createGame(roomId: string) {
                 id: 0,
             }));
         }
-        game.fields.set(key, Array.from({ length: 10 }, () => Array(10).fill(0)));
     });
     
     games.set(game.idGame, game);
-    console.log(game.fields);
     
     /*
         [

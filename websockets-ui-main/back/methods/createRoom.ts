@@ -1,7 +1,6 @@
 import Room from "../classes/Room";
 import {users, rooms} from "../database"
 import crypto from 'crypto'
-import createGame from "./createGame";
 import WebSocket from "ws";
 export default function createRoom(ws: WebSocket){
     // Use Map's values() method to find the user
