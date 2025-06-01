@@ -5,6 +5,7 @@ export default function StartGame(game: Game) {
     let players_array = Array.from(players.entries());
     const randomIndex = Math.floor(Math.random() * players_array.length);
     const [randomKey, randomValue] = players_array[randomIndex];
+    randomValue.your_turn = true;
     players.forEach((player) => {
         fillMatrix(player);
         player.ws_connection?.send(JSON.stringify({
@@ -12,7 +13,7 @@ export default function StartGame(game: Game) {
             data:JSON.stringify(
             {
                 ships: player.ships,
-                currentPlayerIndex: player.gameId,
+                currentPlayerIndex: randomKey,
             }),
             id: 0,
         }));
@@ -22,7 +23,7 @@ export default function StartGame(game: Game) {
             type: "turn",
             data:JSON.stringify(
                 {
-                    currentPlayer: randomValue.gameId, /* id of the player in the current game session */
+                    currentPlayer: randomKey, /* id of the player in the current game session */
                 }),
             id: 0,
         }));

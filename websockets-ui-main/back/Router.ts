@@ -33,11 +33,11 @@ export default function router(data: string, ws: WebSocket) {
         case "add_ships":
             ShipsRequestValidation(JSON.parse(dataObject.data))
             break;
-        case "Attack":
-            console.log(dataObject.message)
+        case "attack":
+            console.log(dataObject.data)
             break;
         case "randomAttack":
-            console.log(dataObject.message)
+            console.log(dataObject.data)
             break;
         default:
             throw new Error("Unknown type");
