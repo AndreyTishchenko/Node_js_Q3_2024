@@ -1,7 +1,8 @@
 import WebSocket from 'ws'
-import {rooms, users} from '../database'
-import User from '../classes/User';
-import createGame from './createGame';
+import {rooms, users} from '../../database'
+import User from '../../classes/User';
+import WebSocketSend from '../ws/WsSend'
+import createGame from '../game/createGame';
 export default function AddUserToRoom(ws: WebSocket, data: {indexRoom: string}){
     const room = rooms.get(data.indexRoom);
     if (!room) {
@@ -27,11 +28,11 @@ export default function AddUserToRoom(ws: WebSocket, data: {indexRoom: string}){
     users.forEach((client) => {
         if (client.ws_connection !== null) {
             let freeRoomsFroThisUser = freeRooms.filter(room => !room.roomUsers.some(user => user.id === client.index));
-            client.ws_connection.send(JSON.stringify({
+            WebSocketSend(client.ws_connection, JSON.stringify({
                 type: "update_room",
                 data: JSON.stringify(freeRoomsFroThisUser),
                 id: 0,
-            }));
+            }))
         }
     });
     createGame(data.indexRoom)

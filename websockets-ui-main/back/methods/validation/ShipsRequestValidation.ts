@@ -1,5 +1,5 @@
-import { games } from "../database";
-import StartGame from "./StartGame"
+import { games } from "../../database";
+import StartGame from "../game/StartGame"
 export default function ShipsRequestValidation(data:
     {
         gameId: string,

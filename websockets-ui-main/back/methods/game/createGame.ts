@@ -1,7 +1,8 @@
-import Game from "../classes/Game";
+import Game from "../../classes/Game";
 import crypto from 'crypto';
-import {rooms, users, games} from  "../database"
-import Game_User from "../classes/Game_User";
+import {rooms, users, games} from  "../../database"
+import WebSocketSend from "../ws/WsSend";
+import Game_User from "../../classes/Game_User";
 export default function createGame(roomId: string) {
     const room = rooms.get(roomId);
     if (!room) {
@@ -27,14 +28,14 @@ export default function createGame(roomId: string) {
 
     game.players.forEach((value, key) => {
         if (value.ws_connection) {
-            value.ws_connection.send(JSON.stringify({
+            WebSocketSend(value.ws_connection, JSON.stringify({
                 type: "create_game",
                 data: JSON.stringify({
                     idGame: game.idGame,
                     idPlayer: key
                 }),
                 id: 0,
-            }));
+            }))
         }
     });
     

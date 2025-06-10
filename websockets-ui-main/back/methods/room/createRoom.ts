@@ -1,7 +1,8 @@
-import Room from "../classes/Room";
-import {users, rooms} from "../database"
+import Room from "../../classes/Room";
+import {users, rooms} from "../../database"
 import crypto from 'crypto'
 import WebSocket from "ws";
+import WebSocketSend from "../ws/WsSend";
 export default function createRoom(ws: WebSocket){
     // Use Map's values() method to find the user
     const user = Array.from(users.values()).find(element => element.ws_connection === ws) || null;
@@ -21,12 +22,12 @@ export default function createRoom(ws: WebSocket){
         });
         users.forEach((client) => {
             if (client.ws_connection !== null) {
-                let freeRoomsFroThisUser = freeRooms.filter(room => !room.roomUsers.some(user => user.id === client.index));
-                client.ws_connection.send(JSON.stringify({
+                let freeRoomsForThisUser = freeRooms.filter(room => !room.roomUsers.some(user => user.id === client.index));
+                WebSocketSend(client.ws_connection, JSON.stringify({
                     type: "update_room",
-                    data: JSON.stringify(freeRoomsFroThisUser),
+                    data: JSON.stringify(freeRoomsForThisUser),
                     id: 0,
-                }));
+                }))
             }
         });
     } else {

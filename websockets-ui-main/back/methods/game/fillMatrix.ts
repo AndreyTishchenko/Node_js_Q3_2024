@@ -1,4 +1,4 @@
-import Game_User from '../classes/Game_User'
+import Game_User from '../../classes/Game_User'
 export default function fillMatrix(player: Game_User):void {
     let filledMatrix: Array<Array<number>> = player.matrix;
     player.ships.forEach((ship) => {

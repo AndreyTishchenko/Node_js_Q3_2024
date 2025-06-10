@@ -1,13 +1,14 @@
 import WebSocket from 'ws';
 import crypto from 'crypto'
 import { wss } from './websocketServer';
-import reg_user from './methods/reg_user';
+import reg_user from './methods/user/reg_user';
 import {users} from './database';
-import addUserToDB from './methods/addUserToDB'
-import createRoom from './methods/createRoom';
-import AddUserToRoom from './methods/addUserToRoom'
+import addUserToDB from './methods/user/addUserToDB'
+import createRoom from './methods/room/createRoom';
+import AddUserToRoom from './methods/room/addUserToRoom'
 import User from './classes/User';
-import ShipsRequestValidation from './methods/ShipsRequestValidation'
+import ShipsRequestValidation from './methods/validation/ShipsRequestValidation'
+import attackHandler from "./methods/game/Attack"
 export default function router(data: string, ws: WebSocket) {
     let dataObject = JSON.parse(data);
     switch (dataObject.type) {
@@ -34,10 +35,10 @@ export default function router(data: string, ws: WebSocket) {
             ShipsRequestValidation(JSON.parse(dataObject.data))
             break;
         case "attack":
-            console.log(dataObject.data)
+            attackHandler(JSON.parse(dataObject.data))
             break;
         case "randomAttack":
-            console.log(dataObject.data)
+            attackHandler(dataObject.data)
             break;
         default:
             throw new Error("Unknown type");
